@@ -1,0 +1,27 @@
+- name: Install Docker and start app
+  hosts: servers
+  become: true
+  tasks:
+    - name: Install docker
+      apt:
+        name: docker.io
+        state: present
+        update_cache: yes
+
+    - name: Install docker-compose
+      apt:
+        name: docker-compose
+        state: present
+
+    - name: Copy project files
+      copy:
+        src: ../internship_project/
+        dest: /home/ubuntu/internship_project/
+        owner: ubuntu
+        group: ubuntu
+        mode: 0755
+
+    - name: Run docker-compose
+      command: docker-compose up -d
+      args:
+        chdir: /home/ubuntu/internship_project/
